@@ -1,0 +1,71 @@
+  
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <script src="/js/echarts.min.js"></script>
+</head>  
+  <script type="text/javascript">  
+  
+   var xmlhttp;  
+    // 创建XMLHTTPRequest对象   
+    function createXMLHTTPRequest()  
+    {  
+         if(window.ActiveXObject)//②如果当前浏览器为IE   
+         {  
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");  
+         }  
+         else if(window.XMLHTTPRequest)//③如果是其他浏览器   
+         {  
+            xmlhttp = new XMLHTTPRequest();  
+         }  
+    }  
+       
+    function getInfo()  
+    {  
+      createXMLHTTPRequest();  
+      xmlhttp.open("get", "http://audicms.ogilvy.com.cn/webapp/front/dealerapi!getdealerlist.action", true);  
+      xmlhttp.onreadystatechange = returnInfo;  
+      xmlhttp.send(null);  
+    }  
+       
+    function returnInfo()  
+    {  
+      if(xmlhttp.readyState == 4)  
+      {  
+       var info = xmlhttp.responseText;  
+       eval("var json= " + info);  
+       var message="";  
+       var dealerlocation="";  
+       var salesphone="";  
+      for(var i=0;i<json.dealers.length;i++){  
+           message+="经销商名称：<font style='color:red;'>" + json.dealers[i].name + "</font>  <br/>";  
+           salesphone+="经销商电话：<font style='color:red;'>" + json.dealers[i].salesphone + "</font>  <br/>";  
+           dealerlocation+="经销商经纬度：<font style='color:red;'>" + json.dealers[i].location + "</font>  <br/>";  
+      }  
+          
+   
+       document.getElementById("showInfo").innerHTML = message;  
+       document.getElementById("salesphone").innerHTML = salesphone  
+       document.getElementById("location").innerHTML=dealerlocation;  
+      }  
+    }  
+   
+  </script>
+<body>
+
+<br/><br/>
+<h2 style="color: red;">异步调用JSON</h2>
+        <br/><input type="button" value="获取JSON数据" onclick="getInfo()" />
+        <table>
+        <tr>
+        <td><div id="showInfo"></div></td>
+        <td><span id="salesphone"><span></td>
+        <td><span id="location"><span></td>
+        </tr>
+        </table>
+        </body>
+        </html>
+
+        </body>
+</html>
